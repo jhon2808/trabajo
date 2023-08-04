@@ -1,0 +1,97 @@
+CREATE DATABASE FM;
+USE FM ;
+
+-- ------------------------------------------------------- Table rol-------------------------------------------------------
+CREATE TABLE rol (
+idrol INT NOT NULL AUTO_INCREMENT,
+nombre_rol VARCHAR (45) NOT NULL,
+PRIMARY KEY (idrol)
+
+);
+
+-- ------------------------------------------------------- Table usuario-------------------------------------------------------
+CREATE TABLE usuario (
+idusuario INT NOT NULL AUTO_INCREMENT,
+nombre VARCHAR(45) NOT NULL,
+apellido VARCHAR(45) NOT NULL,
+cc VARCHAR(45) NOT NULL,
+telefono VARCHAR(45) NOT NULL,
+correo_electronico VARCHAR(45) NOT NULL,
+PRIMARY KEY (idusuario)
+
+);
+
+-- ------------------------------------------------------- Table rol_has_usuario-------------------------------------------------------
+CREATE TABLE rol_has_usuario (
+idrol_has_usuario INT NOT NULL AUTO_INCREMENT,
+rol_idrol INT NOT NULL,
+usuario_idusuario INT NOT NULL,
+PRIMARY KEY (idrol_has_usuario),
+FOREIGN KEY (rol_idrol) REFERENCES rol (idrol),
+FOREIGN KEY (usuario_idusuario) REFERENCES usuario (idusuario)
+
+);
+-- ------------------------------------------------------- Table recoleccion-------------------------------------------------------
+CREATE TABLE recoleccion (
+idrecoleccion INT NOT NULL AUTO_INCREMENT,
+nombre VARCHAR(45) NOT NULL,
+fecha VARCHAR(45) NOT NULL,
+cantidad VARCHAR(45) NOT NULL,
+peso VARCHAR(45) NOT NULL,
+PRIMARY KEY (idrecoleccion)
+
+);
+
+-- ------------------------------------------------------- Table producto-------------------------------------------------------
+CREATE TABLE producto (
+idproducto INT NOT NULL AUTO_INCREMENT,
+nombre VARCHAR(45) NOT NULL,
+recoleccion_idrecoleccion INT NOT NULL,
+PRIMARY KEY (idproducto),
+FOREIGN KEY (recoleccion_idrecoleccion) REFERENCES recoleccion (idrecoleccion)
+
+);
+
+-- ------------------------------------------------------- Table precio-------------------------------------------------------
+CREATE TABLE precio (
+idprecio INT NOT NULL AUTO_INCREMENT,
+precio_unidad VARCHAR(45) NOT NULL,
+precio_peso VARCHAR(45) NOT NULL,
+producto_idproducto INT NOT NULL,
+PRIMARY KEY (idprecio),
+FOREIGN KEY (producto_idproducto) REFERENCES producto (idproducto)
+
+);
+
+
+-- ------------------------------------------------------- Table tipo_pago-------------------------------------------------------
+CREATE TABLE tipo_pago (
+idtipo_pago INT NOT NULL AUTO_INCREMENT,
+tipo_p VARCHAR(45) NOT NULL,
+PRIMARY KEY (idtipo_pago)
+);
+
+
+-- ------------------------------------------------------ Table venta-------------------------------------------------------
+CREATE TABLE venta (
+idventa INT NOT NULL AUTO_INCREMENT,
+fecha_venta VARCHAR(45) NOT NULL,
+rol_has_usuario_idrol_has_usuario INT NOT NULL,
+precio_idprecio INT NOT NULL,
+PRIMARY KEY (idventa),
+FOREIGN KEY (rol_has_usuario_idrol_has_usuario) REFERENCES rol_has_usuario (idrol_has_usuario),
+FOREIGN KEY (precio_idprecio) REFERENCES precio (idprecio)
+
+);
+
+-- ------------------------------------------------------- Table factura-------------------------------------------------------
+CREATE TABLE factura (
+idfactura INT NOT NULL AUTO_INCREMENT,
+numero VARCHAR(45) NOT NULL,
+fecha VARCHAR(45) NOT NULL,
+venta_idventa INT NOT NULL,
+tipo_pago_idtipo_pago INT NOT NULL,
+PRIMARY KEY (idfactura),
+FOREIGN KEY (venta_idventa) REFERENCES venta (idventa),
+FOREIGN KEY (tipo_pago_idtipo_pago) REFERENCES tipo_pago (idtipo_pago)
+);
